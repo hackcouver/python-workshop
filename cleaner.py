@@ -21,6 +21,8 @@ def cleanData(srs: pd.Series) -> pd.Series:
     srs = srs.str.replace("....", "", regex=False)
     # remove tags
     srs = srs.str.replace("@[a-zA-Z]+ ", "")
+    # remove links
+    srs = srs.str.replace("[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)", "")
     return srs
 
 
@@ -39,5 +41,6 @@ if __name__ == "__main__":
     srs = getData()
     srs = cleanData(srs)
     srs = tokenizeSeries(srs)
+    srs = srs.reindex()
     print(srs.head(40))
     srs.to_csv("data/tokenized.txt")
